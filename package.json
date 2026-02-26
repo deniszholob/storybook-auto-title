@@ -1,0 +1,81 @@
+{
+  "name": "storybook-auto-titles",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "Denis Zholob",
+  "description": "Automatically generate clean, human-readable Storybook sidebar titles from your file structure.",
+  "keywords": [
+    "storybook",
+    "storybook-addon",
+    "storybook-titles",
+    "monorepo",
+    "nx",
+    "angular",
+    "react",
+    "vue"
+  ],
+  "repository": "github:storybook-auto-title",
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">= 22.16.0",
+    "npm": ">= 11.4.2"
+  },
+  "type": "module",
+  "main": "./dist/lib/index.cjs",
+  "module": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "require": "./dist/lib/index.cjs"
+    }
+  },
+  "files": [
+    "dist/lib"
+  ],
+  "scripts": {
+    "i": "pnpm i",
+    "build": "pnpm run clean && tsup",
+    "pack:dist": "pnpm pack --pack-destination dist",
+    "build:package": "pnpm run build && pnpm run pack:dist",
+    "build:storybook": "NODE_OPTIONS=--import=tsx storybook build --output-dir dist/storybook",
+    "storybook": "NODE_OPTIONS=--import=tsx storybook dev",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:write": "prettier . --write",
+    "prepublishOnly": "pnpm run clean && pnpm run build && pnpm run test",
+    "set-permissions": "chmod +x ./node_modules/husky/lib/bin.js && chmod +x ./node_modules/.bin/prettier",
+    "pre-commit": "pnpx lint-staged",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix"
+    ],
+    "**/*": [
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@storybook/addon-docs": "^10.2.12",
+    "@storybook/html-vite": "^10.2.12",
+    "@typescript-eslint/eslint-plugin": "8.56.1",
+    "@typescript-eslint/parser": "8.56.1",
+    "eslint": "10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.8.1 ",
+    "storybook": "^10.2.12",
+    "tsup": " 8.5.1 ",
+    "tsx": "^4.20.6",
+    "typescript": " 5.9.3 ",
+    "typescript-eslint": "^8.46.3",
+    "vitest": "^3.2.4"
+  }
+}

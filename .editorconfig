@@ -1,0 +1,31 @@
+# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Unix-style newlines with a newline ending every file
+end_of_line = lf
+
+# Typescript
+[*.ts]
+quote_type = single
+max_line_length = 80
+
+# HTML
+[*.html]
+indent_size = 2
+max_line_length = 100
+
+# Markdown
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+
+# JS related
+[*.{js,ts,json,yml}]
+indent_size = 2
