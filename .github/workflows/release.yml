@@ -29,20 +29,23 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
+      - name: Verify version
+        uses: ./.github/actions/verify-npm-tag
+
       - name: Install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: 0
 
-      - name: Test
-        run: pnpm run test
-
-      - name: Build package
+      - name: Build + Pack tarball
         run: pnpm run build:package
 
+      # This publishes the tarball you already packed into /dist
       - name: Publish package to npm
-        if: env.NODE_AUTH_TOKEN != ''
-        run: pnpm publish --no-git-checks --access public
+        run: pnpm run publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          HUSKY: 0
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

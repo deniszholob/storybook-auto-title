@@ -1,5 +1,5 @@
 {
-  "name": "storybook-auto-titles",
+  "name": "@deniszholob/storybook-auto-titles",
   "version": "0.0.1",
   "license": "MIT",
   "author": "Denis Zholob",
@@ -36,6 +36,7 @@
   ],
   "scripts": {
     "i": "pnpm i",
+    "ci": "pnpm i --frozen-lockfile",
     "build": "pnpm run clean && tsup",
     "pack:dist": "pnpm pack --pack-destination dist",
     "build:package": "pnpm run build && pnpm run pack:dist",
@@ -44,9 +45,11 @@
     "clean": "rm -rf dist",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
     "format:write": "prettier . --write",
+    "publish": "pnpm publish ./dist/*.tgz --access public --no-git-checks",
     "prepublishOnly": "pnpm run clean && pnpm run build && pnpm run test",
     "set-permissions": "chmod +x ./node_modules/husky/lib/bin.js && chmod +x ./node_modules/.bin/prettier",
     "pre-commit": "pnpx lint-staged",

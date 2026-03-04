@@ -1,14 +1,40 @@
-# storybook-auto-titles
+# @deniszholob/storybook-auto-titles
 
-🧠 Human-readable, automatically generated Storybook sidebar titles — zero per-story boilerplate.
+Human-readable, automatically generated Storybook sidebar titles — zero per-story boilerplate.
 
 Automatically transform Storybook’s implicit auto-titles into clean, readable, hierarchical groups based on your file structure.
 
----
+## 🧩 Example
+
+See https://deniszholob.github.io/storybook-auto-title/ for example storybook deployment
+
+### File
+
+```
+src/app/components/generic/badge/badge.component.stories.ts
+```
+
+[![Component Location](screenshots/component-location.png)](screenshots/component-location.png)
+
+### Default Storybook auto-title
+
+```
+Components/generic/badge/badge.component/Badge
+```
+
+[![Component Storybook Default Title](screenshots/component-sb-default-title.png)](screenshots/component-sb-default-title.png)
+
+### With @deniszholob/storybook-auto-titles
+
+```
+Components/Generic/Badge
+```
+
+[![Component Storybook Auto Title](screenshots/component-sb-auto-title.png)](screenshots/component-sb-auto-title.png)
 
 ## ✨ Features
 
-- ✅ Storybook 8, 9, and 10 compatible
+- ✅ Storybook 8, 9, and 10+ compatible (storybook versions with experimental_indexers)
 - ✅ Framework agnostic (Angular, React, Vue, Web Components, etc.)
 - ✅ Keeps Storybook’s auto-title logic (uses `makeTitle`)
 - ✅ Converts kebab-case / snake_case / dotted names → Title Case
@@ -19,27 +45,25 @@ Automatically transform Storybook’s implicit auto-titles into clean, readable,
 - ✅ ESM + CJS compatible
 - ✅ Monorepo and Nx friendly
 
----
-
 ## 📦 Installation
 
+### From npm
+
 ```bash
-pnpm add -D storybook-auto-titles
+pnpm add -D @deniszholob/storybook-auto-titles
 # or
-npm i -D storybook-auto-titles
+npm i -D @deniszholob/storybook-auto-titles
 # or
-yarn add -D storybook-auto-titles
+yarn add -D @deniszholob/storybook-auto-titles
 ```
 
 ### Local install (no npm registry)
 
-```bash
-pnpm run build
-pnpm pack --pack-destination .
-pnpm add -D ../storybook-auto-title/storybook-auto-titles-<version>.tgz
-```
+Download release asset https://github.com/deniszholob/storybook-auto-title/releases
 
----
+```bash
+pnpm add -D storybook-auto-titles-<version>.tgz
+```
 
 ## 🚀 Usage
 
@@ -47,7 +71,7 @@ pnpm add -D ../storybook-auto-title/storybook-auto-titles-<version>.tgz
 
 ```ts
 import type { StorybookConfig } from '@storybook/angular';
-import { withFlattenedAutoTitles } from 'storybook-auto-titles';
+import { withFlattenedAutoTitles } from '@deniszholob/storybook-auto-titles';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx|js|jsx|mdx)'],
@@ -56,32 +80,6 @@ const config: StorybookConfig = {
 
 export default config;
 ```
-
-That’s it — no per-story `title` needed.
-
----
-
-## 🧩 Example
-
-### File
-
-```
-libs/ui/src/lib/button/button.component.stories.ts
-```
-
-### Default Storybook auto-title
-
-```
-Libs/Ui/Src/Lib/Button/Button Component
-```
-
-### With storybook-auto-titles
-
-```
-UI/Button
-```
-
----
 
 ## ⚙️ Configuration
 
@@ -92,10 +90,6 @@ experimental_indexers: withFlattenedAutoTitles({
 });
 ```
 
-## Storybook demo in this repo
-
-This repository includes a sample Storybook setup in [`.storybook/main.ts`](./.storybook/main.ts) and stories in [`stories/`](./stories) that demonstrate automatic title flattening.
-
 ### Options
 
 | Option           | Type                  | Default    | Description                                     |
@@ -105,29 +99,12 @@ This repository includes a sample Storybook setup in [`.storybook/main.ts`](./.s
 | segmentTransform | `(segment) => string` | Title Case | Custom label formatter                          |
 | flattenTitle     | `(title) => string`   | internal   | Full override for custom pipelines              |
 
----
-
 ## 🧠 Why this exists
 
-In large projects, Storybook auto-titles often look like:
+Without this, you would either:
 
-```
-components/production-chain-editor/catalog-recipe-form/catalog-recipe-form.component
-```
-
-This addon turns that into:
-
-```
-Components/Production Chain Editor/Catalog Recipe Form
-```
-
-Without:
-
-- manually setting `title` in every story
-- enforcing naming conventions
-- breaking Storybook indexing
-
----
+- manually setting `title` in every story to achieve pretty title (hard to manage)
+- use the defaults (not as friendly, and requires more clicks)
 
 ## 🏗 How it works
 
@@ -136,78 +113,3 @@ We hook into Storybook’s experimental indexer API and:
 1. Ask Storybook for the correct implicit title via `options.makeTitle()`
 2. Transform the result into a human-readable hierarchy
 3. Remove stale `__id` values so HMR and CSF imports stay stable
-
-This means we extend Storybook — we don’t replace its logic.
-
----
-
-## 🧱 Compatibility (storybook version with experimental_indexers)
-
-| Storybook | Supported |
-| --------- | --------- |
-| 7.3+      | ✅        |
-| 8.x       | ✅        |
-| 9.x       | ✅        |
-| 10.x      | ✅        |
-
----
-
-## 🔌 Framework support
-
-- Angular
-- React
-- Vue
-- Svelte
-- Web Components
-- Next.js / Nx / Turborepo / Vite / Webpack
-
----
-
-## 🛠 Monorepo friendly
-
-Especially useful for:
-
-- Nx workspaces
-- deep `libs/` structures
-- shared design systems
-- auto-generated stories
-
----
-
-## 📄 Before / After
-
-### Before
-
-```
-libs/ui/src/lib/forms/input-text/input-text.component
-```
-
-### After
-
-```
-UI/Forms/Input Text
-```
-
----
-
-## 🗺 Roadmap
-
-- Preset mode (`addons` entry)
-- Built-in Nx prefix detection
-- Configurable casing strategies
-- Story sorting helpers
-
----
-
-## CI/CD
-
-- CI (`.github/workflows/ci.yml`) runs lint/tests/builds and deploys Storybook to GitHub Pages on `main`.
-- Release (`.github/workflows/release.yml`) creates a GitHub Release on `v*.*.*` tags and publishes to npm when `NPM_TOKEN` is configured.
-
----
-
-## 🤝 Contributing
-
-PRs and ideas welcome!
-
----
