@@ -8,10 +8,14 @@ on:
 
 permissions:
   contents: write
+  id-token: write # Required for provenance for npm publish https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      HUSKY: 0
 
     steps:
       - name: Checkout
@@ -34,19 +38,20 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
-        env:
-          HUSKY: 0
 
+      # This builds the tarball and packs it into /dist
       - name: Build + Pack tarball
-        run: pnpm run build:package
+        run: pnpm run build:lib
 
-      # This publishes the tarball you already packed into /dist
+      # This installs the tarball packed into /dist
+      - name: Test tarball
+        run: pnpm run build:test-install
+
+      # This publishes the tarball packed into /dist to npm
       - name: Publish package to npm
-        run: pnpm run publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0
+        run: pnpm run build:publish  --provenance
 
+      # This creates a GitHub release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
