@@ -1,30 +1,21 @@
-# @deniszholob/storybook-auto-titles
+# Storybook Auto Titles
 
 Human-readable, automatically generated Storybook sidebar titles — zero per-story boilerplate.
 
 Automatically transform Storybook’s implicit auto-titles into clean, readable, hierarchical groups based on your file structure.
 
-## 🧩 Example
+# Support Me
+
+If you find the this useful, consider:
+
+- Donating Ko-fi: https://ko-fi.com/deniszholob
+- Supporting on Patreon: https://www.patreon.com/deniszholob
+
+# 🧩 Example
 
 See https://deniszholob.github.io/storybook-auto-title/ for example storybook deployment
 
-### File
-
-```
-src/app/components/generic/badge/badge.component.stories.ts
-```
-
-[![Component Location](screenshots/component-location.png)](screenshots/component-location.png)
-
-### Default Storybook auto-title
-
-```
-Components/generic/badge/badge.component/Badge
-```
-
-[![Component Storybook Default Title](screenshots/component-sb-default-title.png)](screenshots/component-sb-default-title.png)
-
-### With @deniszholob/storybook-auto-titles
+## With @deniszholob/storybook-auto-titles
 
 ```
 Components/Generic/Badge
@@ -32,22 +23,25 @@ Components/Generic/Badge
 
 [![Component Storybook Auto Title](screenshots/component-sb-auto-title.png)](screenshots/component-sb-auto-title.png)
 
-## ✨ Features
+## Default Storybook titles
 
-- ✅ Storybook 8, 9, and 10+ compatible (storybook versions with experimental_indexers)
-- ✅ Framework agnostic (Angular, React, Vue, Web Components, etc.)
-- ✅ Keeps Storybook’s auto-title logic (uses `makeTitle`)
-- ✅ Converts kebab-case / snake_case / dotted names → Title Case
-- ✅ Removes noisy suffixes like `.component` and `.stories`
-- ✅ Deduplicates repeated path segments
-- ✅ Optional prefix stripping (`src/app`, `libs/ui`, etc.)
-- ✅ No changes required in your story files
-- ✅ ESM + CJS compatible
-- ✅ Monorepo and Nx friendly
+```
+Components/generic/badge/badge.component/Badge
+```
 
-## 📦 Installation
+[![Component Storybook Default Title](screenshots/component-sb-default-title.png)](screenshots/component-sb-default-title.png)
 
-### From npm
+## File tree
+
+```
+src/app/components/generic/badge/badge.component.stories.ts
+```
+
+[![Component Location](screenshots/component-location.png)](screenshots/component-location.png)
+
+# 📦 Installation
+
+## From npm
 
 ```bash
 pnpm add -D @deniszholob/storybook-auto-titles
@@ -57,7 +51,7 @@ npm i -D @deniszholob/storybook-auto-titles
 yarn add -D @deniszholob/storybook-auto-titles
 ```
 
-### Local install (no npm registry)
+## Local install (no npm registry)
 
 Download release asset https://github.com/deniszholob/storybook-auto-title/releases
 
@@ -65,9 +59,9 @@ Download release asset https://github.com/deniszholob/storybook-auto-title/relea
 pnpm add -D storybook-auto-titles-<version>.tgz
 ```
 
-## 🚀 Usage
+# 🚀 Usage
 
-### .storybook/main.ts
+## .storybook/main.ts
 
 ```ts
 import type { StorybookConfig } from '@storybook/angular';
@@ -81,7 +75,7 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-## ⚙️ Configuration
+# ⚙️ Configuration
 
 ```ts
 experimental_indexers: withFlattenedAutoTitles({
@@ -90,7 +84,7 @@ experimental_indexers: withFlattenedAutoTitles({
 });
 ```
 
-### Options
+## Options
 
 | Option           | Type                  | Default    | Description                                     |
 | ---------------- | --------------------- | ---------- | ----------------------------------------------- |
@@ -99,14 +93,27 @@ experimental_indexers: withFlattenedAutoTitles({
 | segmentTransform | `(segment) => string` | Title Case | Custom label formatter                          |
 | flattenTitle     | `(title) => string`   | internal   | Full override for custom pipelines              |
 
-## 🧠 Why this exists
+# ✨ Features
+
+- ✅ Storybook 8, 9, and 10+ compatible (storybook versions with experimental_indexers)
+- ✅ Framework agnostic (Angular, React, Vue, Web Components, etc.)
+- ✅ Keeps Storybook’s auto-title logic (uses `makeTitle`)
+- ✅ Converts kebab-case / snake_case / dotted names → Title Case
+- ✅ Removes noisy suffixes like `.component` and `.stories`
+- ✅ Deduplicates repeated path segments
+- ✅ Optional prefix stripping (`src/app`, `libs/ui`, etc.)
+- ✅ No changes required in your story files
+- ✅ ESM + CJS compatible
+- ✅ Monorepo and Nx friendly
+
+# 🧠 Why this exists
 
 Without this, you would either:
 
 - manually setting `title` in every story to achieve pretty title (hard to manage)
 - use the defaults (not as friendly, and requires more clicks)
 
-## 🏗 How it works
+# 🏗 How it works
 
 We hook into Storybook’s experimental indexer API and:
 

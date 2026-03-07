@@ -38,6 +38,8 @@ export function withFlattenedAutoTitles(
           }
 
           // Avoid stale ID mismatch if Storybook precomputed one.
+          // If title changes, drop precomputed __id to avoid stale id mismatch
+          // during CSF import/HMR. Storybook will regenerate id from new title.
           const entryWithoutStaleId = { ...entry };
           delete entryWithoutStaleId.__id;
 
