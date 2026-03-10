@@ -2,14 +2,29 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Documentation/Auto Title Overview" />
 
-# Auto-title demo
+# Storybook Auto Titles
 
-This Storybook instance is intentionally configured with `withFlattenedAutoTitles()`.
+Human-readable Storybook sidebar titles generated directly from your file structure.
 
-Check the sidebar entry for:
+This demo Storybook is configured with `autoTitleIndexer()` so the examples in the sidebar show the transformed result instead of Storybook's default raw path output.
 
-- `stories/examples/ui/button/icon-button.stories.ts`
+```ts
+const config: StorybookConfig = {
+  experimental_indexers: autoTitleIndexer(),
+};
+```
 
-It is rendered as a cleaner title path instead of raw file segments.
+Repository:
+[github.com/deniszholob/storybook-auto-title](https://github.com/deniszholob/storybook-auto-title)
 
-You can compare this repository's Storybook config in `.storybook/main.ts`.
+## What to look at
+
+- `Examples/Ui/Button`
+- `Examples/Main Menu`
+- `Examples/Utils/Mdx Example`
+
+These examples show path flattening, suffix handling, nested folder preservation, and attached MDX docs.
+
+## Config used in this demo
+
+Check `.storybook/main.ts` in the repository for the active Storybook setup.

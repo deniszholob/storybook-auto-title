@@ -20,4 +20,17 @@ export interface AutoTitleOptions {
    * Custom title flattener override.
    */
   flattenTitle?: (sourceTitle: string) => string;
+
+  /**
+   * Additional or replacement segment suffixes to remove before humanizing.
+   * Example: ["component", "directive", "service"].
+   */
+  stripSegmentSuffixes?: string[];
+
+  /**
+   * Controls how stripSegmentSuffixes is applied.
+   * - "add": append custom suffixes to the default Angular + Storybook list.
+   * - "replace": use only stripSegmentSuffixes.
+   */
+  stripSegmentSuffixesMode?: 'add' | 'replace';
 }

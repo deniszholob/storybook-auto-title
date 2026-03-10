@@ -64,34 +64,51 @@ pnpm add -D storybook-auto-titles-<version>.tgz
 ## .storybook/main.ts
 
 ```ts
+import { autoTitleIndexer, AutoTitleOptions } from '@deniszholob/storybook-auto-titles';
 import type { StorybookConfig } from '@storybook/angular';
-import { withFlattenedAutoTitles } from '@deniszholob/storybook-auto-titles';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx|js|jsx|mdx)'],
-  experimental_indexers: withFlattenedAutoTitles(),
+  experimental_indexers: autoTitleIndexer({
+    // Config Options
+  } satisfies AutoTitleOptions),
 };
 
 export default config;
 ```
 
+For MDX docs, prefer attached docs with `Meta of={...}` so the docs page inherits the same auto-title path as its story file.
+
 # ⚙️ Configuration
 
 ```ts
-experimental_indexers: withFlattenedAutoTitles({
+experimental_indexers: autoTitleIndexer({
   stripPrefixes: ['libs/', 'src/app/'],
   dedupeAdjacent: true,
+  stripSegmentSuffixes: ['widget'],
+  stripSegmentSuffixesMode: 'add',
 });
 ```
 
-## Options
+## Config Options
 
-| Option           | Type                  | Default    | Description                                     |
-| ---------------- | --------------------- | ---------- | ----------------------------------------------- |
-| stripPrefixes    | `string[]`            | `[]`       | Removes leading path segments before processing |
-| dedupeAdjacent   | `boolean`             | `true`     | Removes repeated adjacent folder names          |
-| segmentTransform | `(segment) => string` | Title Case | Custom label formatter                          |
-| flattenTitle     | `(title) => string`   | internal   | Full override for custom pipelines              |
+| Option                   | Type                  | Default    | Description                                                  |
+| ------------------------ | --------------------- | ---------- | ------------------------------------------------------------ |
+| stripPrefixes            | `string[]`            | `[]`       | Removes leading path segments before processing              |
+| dedupeAdjacent           | `boolean`             | `true`     | Removes repeated adjacent folder names                       |
+| segmentTransform         | `(segment) => string` | Title Case | Custom label formatter                                       |
+| flattenTitle             | `(title) => string`   | internal   | Full override for custom pipelines                           |
+| stripSegmentSuffixes     | `string[]`            | `[]`       | Extra or replacement suffixes to strip (without leading `.`) |
+| stripSegmentSuffixesMode | `'add' \| 'replace'`  | `'add'`    | `add` merges with defaults; `replace` uses only your list    |
+
+Default stripped suffixes include Angular + Storybook values:
+`component`, `directive`, `service`, `pipe`, `module`, `guard`, `resolver`, `interceptor`, `stories`, `story`.
+
+Story names are also synced with the story file suffix:
+
+- if suffix is stripped, `Tooltip Directive` becomes `Tooltip`
+- if suffix is not stripped (for example replace with `[]`), `Tooltip` becomes `Tooltip Directive`
+- if a raw name still looks like a filename, it is humanized automatically
 
 # ✨ Features
 
@@ -99,7 +116,9 @@ experimental_indexers: withFlattenedAutoTitles({
 - ✅ Framework agnostic (Angular, React, Vue, Web Components, etc.)
 - ✅ Keeps Storybook’s auto-title logic (uses `makeTitle`)
 - ✅ Converts kebab-case / snake_case / dotted names → Title Case
-- ✅ Removes noisy suffixes like `.component` and `.stories`
+- ✅ Removes noisy suffixes like `.component`, `.directive`, `.service`, `.stories`, etc...
+- ✅ Keeps story names in sync with suffix stripping rules
+- ✅ Preserves nested component folders when child folders also contain stories/docs
 - ✅ Deduplicates repeated path segments
 - ✅ Optional prefix stripping (`src/app`, `libs/ui`, etc.)
 - ✅ No changes required in your story files
@@ -119,4 +138,5 @@ We hook into Storybook’s experimental indexer API and:
 
 1. Ask Storybook for the correct implicit title via `options.makeTitle()`
 2. Transform the result into a human-readable hierarchy
-3. Remove stale `__id` values so HMR and CSF imports stay stable
+3. Sync raw story names with the file suffix when needed
+4. Remove stale `__id` values so HMR and CSF imports stay stable

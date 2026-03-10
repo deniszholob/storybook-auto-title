@@ -1,2 +1,2 @@
-export { withFlattenedAutoTitles } from './with-flattened-auto-titles/with-flattened-auto-titles.util';
+export { autoTitleIndexer } from './auto-title-indexer/auto-title-indexer.util';
 export type { AutoTitleOptions } from './auto-title-options/auto-title-options.model';

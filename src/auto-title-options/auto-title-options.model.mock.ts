@@ -8,6 +8,8 @@ export const MOCK_AutoTitleOptions: AutoTitleOptions = {
   flattenTitle: (sourceTitle: string) => sourceTitle,
   segmentTransform: (segment: string) => segment,
   stripPrefixes: [],
+  stripSegmentSuffixes: [],
+  stripSegmentSuffixesMode: 'add',
 };
 
 export const MOCK_AutoTitleOptions_Array: AutoTitleOptions[] = [MOCK_AutoTitleOptions];
