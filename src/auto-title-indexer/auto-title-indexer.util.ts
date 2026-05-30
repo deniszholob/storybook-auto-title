@@ -28,6 +28,7 @@ export function autoTitleIndexer(
   const {
     stripPrefixes = [],
     dedupeAdjacent = true,
+    stripPathSegments = [],
     segmentTransform,
     flattenTitle,
     stripSegmentSuffixes = [],
@@ -56,6 +57,7 @@ export function autoTitleIndexer(
             flattenTitle?.(normalized) ??
             defaultFlattenTitle(normalized, {
               dedupeAdjacent,
+              stripPathSegments,
               segmentTransform,
               stripSegmentSuffixes: resolvedStripSegmentSuffixes,
               collapseSuffixedDuplicateSegments: !hasNestedStoryArtifactsInSubfolders,

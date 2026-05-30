@@ -15,6 +15,7 @@ type FlattenTitleConfig = {
   dedupeAdjacent: boolean;
   segmentTransform?: (segment: string) => string;
   stripSegmentSuffixes?: string[];
+  stripPathSegments?: string[];
   collapseSuffixedDuplicateSegments?: boolean;
 };
 
@@ -40,18 +41,46 @@ export function applyStripPrefixes(value: string, prefixes: string[]): string {
  * output: "Components/Button"
  */
 export function defaultFlattenTitle(sourceTitle: string, cfg: FlattenTitleConfig): string {
-  const rawSegments = sourceTitle.split('/').filter(Boolean);
-  const humanized = rawSegments
-    .map((segment) => humanizeSegment(segment, cfg.segmentTransform, cfg.stripSegmentSuffixes))
-    .filter(Boolean);
+  const rawSegments = stripPathSegments(
+    sourceTitle.split('/').filter(Boolean),
+    cfg.stripPathSegments,
+  );
+  const transformedSegments = rawSegments
+    .map((segment) => ({
+      raw: segment,
+      humanized: humanizeSegment(segment, cfg.segmentTransform, cfg.stripSegmentSuffixes),
+    }))
+    .filter((segment) => Boolean(segment.humanized));
+
+  const humanized = transformedSegments.map((segment) => segment.humanized);
+  const alignedRawSegments = transformedSegments.map((segment) => segment.raw);
 
   // Storybook auto-title often repeats the final directory as "*.component".
   // Collapse adjacent duplicates so we keep folder hierarchy without noise.
-  const deduped = cfg.dedupeAdjacent
-    ? dedupeAdjacentSegments(humanized, rawSegments, cfg.collapseSuffixedDuplicateSegments ?? true)
+  const dedupedAligned = cfg.dedupeAdjacent
+    ? dedupeAdjacentSegments(
+        humanized,
+        alignedRawSegments,
+        cfg.collapseSuffixedDuplicateSegments ?? true,
+      )
     : humanized;
 
-  return deduped.join('/');
+  return dedupedAligned.join('/');
+}
+
+/**
+ * Removes full path segments that match configured names (case-insensitive).
+ *
+ * Example:
+ * input: (["libs", "components", "src", "accordion"], ["src"])
+ * output: ["libs", "components", "accordion"]
+ */
+export function stripPathSegments(segments: string[], stripSegments: string[] = []): string[] {
+  const normalized = new Set(
+    stripSegments.map((segment) => segment.trim().toLowerCase()).filter(Boolean),
+  );
+  if (normalized.size === 0) return segments;
+  return segments.filter((segment) => !normalized.has(segment.toLowerCase()));
 }
 
 /**

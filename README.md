@@ -84,22 +84,40 @@ For MDX docs, prefer attached docs with `Meta of={...}` so the docs page inherit
 ```ts
 experimental_indexers: autoTitleIndexer({
   stripPrefixes: ['libs/', 'src/app/'],
+  stripPathSegments: ['src'],
   dedupeAdjacent: true,
   stripSegmentSuffixes: ['widget'],
   stripSegmentSuffixesMode: 'add',
 });
 ```
 
+To ignore folder names like `src` anywhere in the title path, use `stripPathSegments`.
+
+Example:
+
+```ts
+experimental_indexers: autoTitleIndexer({
+  stripPathSegments: ['src'],
+  stripSegmentSuffixes: [],
+  stripSegmentSuffixesMode: 'replace',
+});
+```
+
+Path/title example:
+
+- `libs/libname/src/component-name/component-name.stories.ts` -> `Libname/Component Name`
+
 ## Config Options
 
-| Option                   | Type                  | Default    | Description                                                  |
-| ------------------------ | --------------------- | ---------- | ------------------------------------------------------------ |
-| stripPrefixes            | `string[]`            | `[]`       | Removes leading path segments before processing              |
-| dedupeAdjacent           | `boolean`             | `true`     | Removes repeated adjacent folder names                       |
-| segmentTransform         | `(segment) => string` | Title Case | Custom label formatter                                       |
-| flattenTitle             | `(title) => string`   | internal   | Full override for custom pipelines                           |
-| stripSegmentSuffixes     | `string[]`            | `[]`       | Extra or replacement suffixes to strip (without leading `.`) |
-| stripSegmentSuffixesMode | `'add' \| 'replace'`  | `'add'`    | `add` merges with defaults; `replace` uses only your list    |
+| Option                   | Type                  | Default    | Description                                                     |
+| ------------------------ | --------------------- | ---------- | --------------------------------------------------------------- |
+| stripPrefixes            | `string[]`            | `[]`       | Removes leading path segments before processing                 |
+| stripPathSegments        | `string[]`            | `[]`       | Removes matching full path segments anywhere (case-insensitive) |
+| dedupeAdjacent           | `boolean`             | `true`     | Removes repeated adjacent folder names                          |
+| segmentTransform         | `(segment) => string` | Title Case | Custom label formatter (return `''` to remove a segment)        |
+| flattenTitle             | `(title) => string`   | internal   | Full override for custom pipelines                              |
+| stripSegmentSuffixes     | `string[]`            | `[]`       | Extra or replacement suffixes to strip (without leading `.`)    |
+| stripSegmentSuffixesMode | `'add' \| 'replace'`  | `'add'`    | `add` merges with defaults; `replace` uses only your list       |
 
 Default stripped suffixes include Angular + Storybook values:
 `component`, `directive`, `service`, `pipe`, `module`, `guard`, `resolver`, `interceptor`, `stories`, `story`.

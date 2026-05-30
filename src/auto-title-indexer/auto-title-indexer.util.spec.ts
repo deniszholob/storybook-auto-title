@@ -73,6 +73,38 @@ describe('autoTitleIndexer', () => {
     expect(entries[0].title).toBe('Ui/Hero Component');
   });
 
+  test('drops src and resolves to Components/Accordion with default suffix stripping', async () => {
+    const indexer = createMockIndexer([{ name: 'Accordion' } as IndexInput]);
+    const filePath = 'libs/components/src/accordion/accordion.stories.ts';
+
+    const wrapped = await autoTitleIndexer({
+      stripPrefixes: ['libs/'],
+      stripPathSegments: ['src'],
+    })([indexer]);
+
+    const entries = await wrapped[0].createIndex(filePath, {
+      makeTitle: () => 'libs/components/src/accordion/accordion.component',
+    });
+    expect(entries[0].title).toBe('Components/Accordion');
+  });
+
+  test('drops src and resolves to Components/Accordion Component when suffix stripping is replaced', async () => {
+    const indexer = createMockIndexer([{ name: 'Accordion' } as IndexInput]);
+    const filePath = 'libs/components/src/accordion/accordion.stories.ts';
+
+    const wrapped = await autoTitleIndexer({
+      stripPrefixes: ['libs/'],
+      stripPathSegments: ['src'],
+      stripSegmentSuffixes: [],
+      stripSegmentSuffixesMode: 'replace',
+    })([indexer]);
+
+    const entries = await wrapped[0].createIndex(filePath, {
+      makeTitle: () => 'libs/components/src/accordion/accordion.component',
+    });
+    expect(entries[0].title).toBe('Components/Accordion Component');
+  });
+
   test('adds file suffix to matching story name when suffix is not stripped', async () => {
     const indexer = createMockIndexer([
       { title: 'ui/tooltip/tooltip.directive', name: 'Tooltip' } as IndexInput,

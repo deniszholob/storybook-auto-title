@@ -7,6 +7,7 @@ export const MOCK_AutoTitleOptions: AutoTitleOptions = {
   dedupeAdjacent: true,
   flattenTitle: (sourceTitle: string) => sourceTitle,
   segmentTransform: (segment: string) => segment,
+  stripPathSegments: [],
   stripPrefixes: [],
   stripSegmentSuffixes: [],
   stripSegmentSuffixesMode: 'add',

@@ -5,6 +5,13 @@
 ### Changed
 ### Fixed
 
+## [0.0.4]
+### Added
+- `stripPathSegments` option to remove matching full path segments anywhere in the computed title path (case-insensitive), e.g. `['src']`.
+### Fixed
+- Corrected segment alignment during dedupe/collapse when middle segments are removed, preventing malformed titles.
+
+
 ## [0.0.3] - Suffix Options
 ### Added
 - Configurable segment suffix stripping via `stripSegmentSuffixes`.

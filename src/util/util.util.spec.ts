@@ -3,6 +3,7 @@ import {
   defaultFlattenTitle,
   resolveStripSegmentSuffixes,
   DEFAULT_STRIP_SEGMENT_SUFFIXES,
+  stripPathSegments,
 } from './util.util';
 
 // File Level Tests
@@ -74,6 +75,26 @@ describe('Util Utilities', () => {
           collapseSuffixedDuplicateSegments: false,
         }),
       ).toBe('Components/Basics/Main Menu/Main Menu Component');
+    });
+
+    test('strips configured path segments before flattening', () => {
+      const input = 'libs/components/src/accordion/accordion.component';
+      expect(
+        defaultFlattenTitle(input, {
+          dedupeAdjacent: true,
+          stripPathSegments: ['src'],
+        }),
+      ).toBe('Libs/Components/Accordion');
+    });
+  });
+
+  describe('stripPathSegments', () => {
+    test('removes only exact matching segments (case-insensitive)', () => {
+      expect(stripPathSegments(['libs', 'components', 'src', 'src-old'], ['SRC'])).toEqual([
+        'libs',
+        'components',
+        'src-old',
+      ]);
     });
   });
 

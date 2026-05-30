@@ -11,6 +11,13 @@ export interface AutoTitleOptions {
   dedupeAdjacent?: boolean;
 
   /**
+   * Remove matching path segments anywhere in the title path.
+   * Matches full segment names (case-insensitive).
+   * Example: ["src", "lib"].
+   */
+  stripPathSegments?: string[];
+
+  /**
    * Transform each segment label.
    * Defaults to Title Case.
    */
