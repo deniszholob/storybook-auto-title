@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/html-vite';
-import { autoTitleIndexer, type AutoTitleOptions } from '../src/';
+import { autoTitleIndexer, type AutoTitleOptions } from '../src/index';
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(ts|tsx)'],
@@ -9,6 +9,7 @@ const config: StorybookConfig = {
     options: {},
   },
   experimental_indexers: autoTitleIndexer({
+    stripPathSegments: ['src'],
     // stripSegmentSuffixes: [],
     // stripSegmentSuffixesMode: 'replace',
     // stripPrefixes: ['stories/'],
